@@ -137,7 +137,6 @@ class SiteController extends Controller
 
     public function actionRegister()
     {
-        $user = null;
         $model = new RegisterForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
@@ -146,9 +145,6 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('register', [
-            'model' => $model,
-            'user' => $user,
-        ]);
+        return $this->render('register', ['model' => $model]);
     }
 }
