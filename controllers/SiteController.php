@@ -128,10 +128,7 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
-        $list = User::find()->all();
-        return $this->render('about', [
-            'model' => $list
-        ]);
+        return $this->render('about');
     }
 
 
