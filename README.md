@@ -59,7 +59,6 @@ function ($date, $type)
 {
     $userId = Yii::$app->user->id;
     $cacheKey = implode(',', [$date, $type, $userId]);
-    $cache = \Yii::$app->cache;
     $dataList = SomeDataModel::find()->cache(30*60)->where(['date' => $date, 'type' => $type, 'user_id' => $userId])->all();
     $result = [];
     if (!empty($dataList)) {
