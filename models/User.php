@@ -4,19 +4,31 @@ namespace app\models;
 
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
-class User extends ActiveRecord implements \yii\web\IdentityInterface
+/**
+ * Class User
+ * @property $id
+ * @property $email
+ * @property $fullname
+ * @property $type
+ * @property $username
+ * @property $inn
+ * @property $password
+ * @package app\models
+ */
+class User extends ActiveRecord implements IdentityInterface
 {
     /** Individual Employer */
     const TYPE_IE = 'IE';
+
     /** Legal person*/
     const TYPE_LP = 'LP';
+
     /** Individual*/
     const TYPE_I = 'I';
 
-    public $username;
-
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%user}}';
     }
@@ -29,19 +41,19 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         throw new NotSupportedException('Find by token not supported');
     }
 
-    public static function getTypes()
+    public static function getTypes(): array
     {
         return [
-            self::TYPE_LP => 'Юридическое лицо',
-            self::TYPE_IE => 'Индивидуальный предприниматель',
-            self::TYPE_I => 'Физ лицо',
+            self::TYPE_LP => \Yii::t('app', 'Legal Person'),
+            self::TYPE_IE => \Yii::t('app', 'Individual Employer'),
+            self::TYPE_I => \Yii::t('app', 'Individual'),
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
+    public static function findIdentity($id): User
     {
         return static::findOne(['id' => $id]);
     }
@@ -52,9 +64,9 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByUsername($username): User
     {
-        return static::findOne(['fullname' => $username]);
+        return static::findOne(['username' => $username]);
     }
 
     /**
@@ -87,8 +99,8 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      * @param string $password password to validate
      * @return bool if password provided is valid for current user
      */
-    public function validatePassword($password)
+    public function validatePassword($password): bool
     {
-        return $this->password === $password;
+        return \Yii::$app->security->validatePassword($password, $this->password);
     }
 }

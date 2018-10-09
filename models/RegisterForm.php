@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-
 use yii\base\Model;
 
 class RegisterForm extends Model
@@ -14,7 +13,7 @@ class RegisterForm extends Model
     public $inn;
     public $userType;
 
-    public function rules()
+    public function rules(): array
     {
         return [
             [['fullname', 'email', 'userType'], 'required'],
@@ -24,7 +23,7 @@ class RegisterForm extends Model
                 'inn',
                 'required',
                 'when' => function ($model) {
-                    return in_array($model->userType, [User::TYPE_LP, User::TYPE_IE], true);
+                    return \in_array($model->userType, [User::TYPE_LP, User::TYPE_IE], true);
                 },
                 'enableClientValidation' => false
             ],
@@ -41,7 +40,7 @@ class RegisterForm extends Model
         ];
     }
 
-    public function signup()
+    public function signup(): User
     {
         if (!$this->validate()) {
             return null;
@@ -51,11 +50,11 @@ class RegisterForm extends Model
         $user->fullname = $this->fullname;
         $user->email = $this->email;
         $user->type = $this->userType;
+        $user->username = $this->email;
         if ($this->userType !== User::TYPE_I) {
             $user->inn = $this->inn;
         }
-        $security = \Yii::$app->security;
-        $user->password = $security->generatePasswordHash($security->generateRandomString(8));
+        $user->password = \Yii::$app->security->generatePasswordHash($this->email);
         if ($user->save()) {
             if ($user->type === User::TYPE_LP) {
                 $company = new Company();
@@ -68,4 +67,3 @@ class RegisterForm extends Model
         return $user;
     }
 }
-
