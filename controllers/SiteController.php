@@ -12,6 +12,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\captcha\CaptchaAction;
+use yii\web\ErrorAction;
 
 class SiteController extends Controller
 {
@@ -48,10 +50,10 @@ class SiteController extends Controller
     {
         return [
             'error' => [
-                'class' => 'yii\web\ErrorAction',
+                'class' => ErrorAction::class,
             ],
             'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
+                'class' => CaptchaAction::class,
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
@@ -132,14 +134,17 @@ class SiteController extends Controller
     }
 
 
+    /**
+     * Display register page.
+     *
+     * @return string|Response
+     */
     public function actionRegister()
     {
         $model = new RegisterForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                Yii::$app->session->setFlash('registerFormSubmitted');
-                return $this->refresh();
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            Yii::$app->session->setFlash('registerFormSubmitted');
+            return $this->refresh();
         }
 
         return $this->render('register', ['model' => $model]);
