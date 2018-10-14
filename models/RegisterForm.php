@@ -9,7 +9,7 @@ class RegisterForm extends Model
 
     public $fullname;
     public $email;
-    public $company_name;
+    public $companyName;
     public $inn;
     public $userType;
 
@@ -28,7 +28,7 @@ class RegisterForm extends Model
                 'enableClientValidation' => false
             ],
             [
-                'company_name',
+                'companyName',
                 'required',
                 'when' => function ($model) {
                     return $model->userType === User::TYPE_LP;
@@ -40,7 +40,7 @@ class RegisterForm extends Model
         ];
     }
 
-    public function signup(): User
+    public function signup()
     {
         if (!$this->validate()) {
             return null;
@@ -58,7 +58,7 @@ class RegisterForm extends Model
         if ($user->save()) {
             if ($user->type === User::TYPE_LP) {
                 $company = new Company();
-                $company->title = $this->company_name;
+                $company->title = $this->companyName;
                 $company->user_id = $user->id;
                 $company->save();
             }

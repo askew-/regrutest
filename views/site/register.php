@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'fullname') ?>
                 <?= $form->field($model, 'email') ?>
                 <?= $form->field($model, 'inn') ?>
-                <?= $form->field($model, 'company_name') ?>
+                <?= $form->field($model, 'companyName') ?>
                 <div class="form-group">
                     <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'register-button']) ?>
                 </div>

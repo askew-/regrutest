@@ -53,7 +53,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id): User
+    public static function findIdentity($id): ?User
     {
         return static::findOne(['id' => $id]);
     }
@@ -64,7 +64,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username): User
+    public static function findByUsername($username)
     {
         return static::findOne(['username' => $username]);
     }
