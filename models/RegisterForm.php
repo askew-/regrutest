@@ -18,7 +18,7 @@ class RegisterForm extends Model
         return [
             [['fullname', 'email', 'userType'], 'required'],
             ['inn', 'integer'],
-            ['inn', 'string', 'length' => 9],
+            ['inn', 'string', 'length' => 12],
             [
                 'inn',
                 'required',
